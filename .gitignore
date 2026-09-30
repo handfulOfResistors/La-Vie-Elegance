@@ -1,0 +1,10 @@
+# Snimci ekrana iz radnih sesija — nisu deo sajta
+Claude outputs/
+
+# Sistemski fajlovi
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Word privremeni fajlovi (~$Upitnik....docx)
+~$*
