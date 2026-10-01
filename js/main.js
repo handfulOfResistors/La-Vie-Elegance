@@ -148,7 +148,7 @@
           i5: "Occasion and bridal hair", i6: "Hair treatments, keratin and botox",
           i7: "Beard grooming"
         },
-        s2: { title: "Nails", i1: "Manicure", i2: "Pedicure", i3: "Gel polish", i4: "Nail extensions and infills" },
+        s2: { title: "Nails", i1: "Manicure", i2: "Pedicure", i3: "Gel polish", i4: "Nail extensions and fill-ins" },
         s3: { title: "Waxing", i1: "Legs", i2: "Arms", i3: "Face", i4: "Intimate area" },
         s4: {
           title: "Lashes and brows",

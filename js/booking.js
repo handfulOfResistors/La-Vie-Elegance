@@ -124,6 +124,8 @@
      STANJE
      ====================================================================== */
   var remote = null;          // config sa servera
+  var configPromise = null;   // zahtev za config koji je u toku ili završen
+  var runId = 0;              // koji start() je poslednji — stariji ne crtaju ništa
   var daysShown = 7;
   /* staff: izabrana osoba, ili null = svejedno */
   var answers = { service: null, staff: null, date: null, time: null, name: "", phone: "", email: "" };
@@ -209,6 +211,7 @@
   }
 
   function start() {
+    var run = ++runId;
     answers = { service: null, staff: null, date: null, time: null, name: "", phone: "", email: "" };
     daysShown = 7;
     el.log.innerHTML = "";
@@ -218,12 +221,17 @@
 
     if (remote) { stepCategory(); return; }
 
-    api("config", {}).then(function (res) {
-      if (!res || !res.ok) { throw new Error("config"); }
-      remote = res.config;
+    /* Config još nije stigao (klik odmah po učitavanju) — čeka se isti zahtev */
+    busy(true);
+    loadConfig().then(function () {
+      if (run !== runId) { return; }
+      busy(false);
       stepCategory();
     }).catch(function () {
+      if (run !== runId) { return; }
+      busy(false);
       say(t("errNet"), "bot");
+      choices([{ label: t("restart"), ghost: true, onPick: start }]);
     });
   }
 
@@ -707,6 +715,39 @@
     }).then(function (r) { return r.json(); });
   }
 
+  /* Config se traži odmah pri učitavanju stranice, da chat ne čeka na klik.
+     Svi dobijaju isti zahtev; posle greške sledeći poziv šalje novi. */
+  function loadConfig() {
+    if (configPromise) { return configPromise; }
+    configPromise = api("config", {}).then(function (res) {
+      if (!res || !res.ok) { throw new Error("config"); }
+      remote = res.config;
+      saveCachedConfig(res.config);
+      return remote;
+    });
+    configPromise.catch(function () { configPromise = null; });
+    return configPromise;
+  }
+
+  /* Poslednji config se čuva u browseru — pri ponovnoj poseti chat se
+     otvara odmah, a sveža verzija stiže u pozadini (loadConfig). */
+  var CACHE_KEY = "lve-booking-config";
+
+  function readCachedConfig() {
+    if (DEMO) { return null; }
+    try {
+      var c = JSON.parse(localStorage.getItem(CACHE_KEY) || "null");
+      return c && c.config && c.config.services ? c.config : null;
+    } catch (e) { return null; }
+  }
+
+  function saveCachedConfig(config) {
+    if (DEMO) { return; }
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ config: config, at: Date.now() }));
+    } catch (e) { }
+  }
+
   /* ======================================================================
      JEZIK
      ====================================================================== */
@@ -727,7 +768,9 @@
        dugmad "Zakaži termin" tada rade kao obični tel: linkovi. */
     if (!API && !DEMO) { return; }
     try { lang = localStorage.getItem("lve-lang") === "en" ? "en" : "sr"; } catch (e) { }
+    remote = readCachedConfig();
     build();
+    loadConfig();
   }
 
   if (document.readyState === "loading") {
