@@ -10,7 +10,7 @@ Statički jednostranični sajt za frizersko-kozmetički salon **La Vie Elegance*
 
 Dvoklik na `index.html`. Radi direktno iz fajl sistema (`file://`), bez servera.
 
-Ako želiš lokalni server (preporučeno zbog mape i keširanja):
+Ako želiš lokalni server (preporučeno zbog mape i keširanja) :...
 
 ```bash
 python -m http.server 8000
