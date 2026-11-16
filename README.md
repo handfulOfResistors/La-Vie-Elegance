@@ -144,7 +144,7 @@ Prevod radi preko `data-i18n` atributa u HTML-u i rečnika `translations` na vrh
 
 **Shared hosting (cPanel)** — kopiraj sve fajlove u `public_html/` preko FTP-a.
 
-Posle deploya zameni `https://lavieelegance.rs/` pravim domenom u: `<link rel="canonical">`, `og:url`, JSON-LD (`url`, `@id`, `image`, `logo`) i u `sitemap.xml`.
+Posle deploya zameni `https://www.lavieelegance.com/` pravim domenom u: `<link rel="canonical">`, `og:url`, JSON-LD (`url`, `@id`, `image`, `logo`) i u `sitemap.xml`.
 
 ---
 
@@ -153,5 +153,5 @@ Posle deploya zameni `https://lavieelegance.rs/` pravim domenom u: `<link rel="c
 - [ ] **Prave fotografije** — enterijer salona, radovi, portreti članova tima
 - [ ] **Logo**, ako postoji — trenutno je u upotrebi tekstualni wordmark i monogram "LV"
 - [ ] **Tačne geo koordinate** salona
-- [ ] **Domen** — sajt je pisan za `lavieelegance.rs`, zameni ako je drugi
+- [ ] **Domen** — domen je `www.lavieelegance.com` (podešen u canonical, og:url, JSON-LD, sitemap.xml i robots.txt)
 - [ ] **Prezimena članova tima** (Nikolina, Kaća), ako žele da stoje na sajtu
